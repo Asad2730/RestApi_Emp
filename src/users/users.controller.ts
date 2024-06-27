@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query,
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User, UserRole } from './entities/user.entity';
 
 @Controller('users')
 export class UsersController {
@@ -9,27 +10,27 @@ export class UsersController {
     constructor(private readonly usersService:UsersService){}
     
     @Get() //get users or /users?role (make it optional)
-    findAll(@Query('role') role?: 'INTERN' | 'ENGINEER' | 'ADMIN') {
-        return this.usersService.findAll()
+    async findAll(@Query('role') role?:UserRole):Promise<User[]> {
+        return await this.usersService.findAll(role)
     }
 
     @Get(':id')
-    findOne(@Param('id',ParseIntPipe) id: number) {
-        return this.usersService.findOne(id)
+    async findOne(@Param('id',ParseIntPipe) id: number):Promise<User> {
+        return await this.usersService.findOne(id)
     }
 
     @Post()
-    create(@Body(ValidationPipe) user: CreateUserDto) {
-        return this.usersService.create(user)
+    async create(@Body(ValidationPipe) createUserDto: CreateUserDto):Promise<User> {
+        return await this.usersService.create(createUserDto)
     }
 
     @Patch(':id')
-    update(@Param('id',ParseIntPipe) id: number, @Body(ValidationPipe) userUpdate: UpdateUserDto) {
-        return this.usersService.update(id,userUpdate)
+    async update(@Param('id',ParseIntPipe) id: number, @Body(ValidationPipe) updateUserDto: UpdateUserDto):Promise<User> {
+        return await this.usersService.update(id,updateUserDto)
     }
 
     @Delete(':id')
-    delete(@Param('id',ParseIntPipe) id: number) {
-        return this.usersService.delete(id)
+    async delete(@Param('id',ParseIntPipe) id: number):Promise<User>{
+        return await this.usersService.delete(id)
     }
 }

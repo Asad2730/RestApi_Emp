@@ -1,4 +1,5 @@
 import { IsEmail, IsEnum, IsNotEmpty, IsString } from "class-validator"
+import { UserRole } from "../entities/user.entity"
 
 export class CreateUserDto {
     @IsString()
@@ -8,8 +9,8 @@ export class CreateUserDto {
     @IsEmail()
     email: string
 
-    @IsEnum(['INTERN', 'ENGINEER', 'ADMIN'], {
+    @IsEnum(UserRole, {
         message: 'valid role required'
     })
-    role: 'INTERN' | 'ENGINEER' | 'ADMIN'
+    role: UserRole
 }
